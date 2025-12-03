@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.SyE" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/ladderGreen</item>
+        <item name="colorOnPrimary">@color/textColorLight</item>
+        <item name="colorSecondary">@color/tileBlue</item>
+        <item name="colorOnSecondary">@color/textColorLight</item>
+        <item name="colorError">@color/snakeRed</item>
+        <item name="android:windowBackground">@color/tileCream</item>
+    </style>
+
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- COLOR BASE -->
+    <item>
+        <color android:color="@color/tileCream" />
+    </item>
+
+    <!-- DECORACIÓN: escalera inclinada -->
+    <item android:gravity="center">
+        <shape android:shape="rectangle">
+            <size android:width="300dp" android:height="300dp"/>
+            <solid android:color="#20FFFFFF"/>
+            <stroke android:width="4dp" android:color="@color/ladderGreen"/>
+            <rotate android:fromDegrees="-25"/>
+        </shape>
+    </item>
+
+    <!-- DECORACIÓN: serpiente (círculo rojo translúcido) -->
+    <item android:gravity="bottom|right" android:right="40dp" android:bottom="60dp">
+        <shape android:shape="oval">
+            <size android:width="200dp" android:height="200dp"/>
+            <solid android:color="#20FF0000"/>
+        </shape>
+    </item>
+
+</layer-list>

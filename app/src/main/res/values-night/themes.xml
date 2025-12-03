@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Tema principal noche -->
+    <style name="Theme.SyE" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="colorPrimary">@color/ladderGreen</item>
+        <item name="colorOnPrimary">@color/textColorLight</item>
+
+        <item name="colorSecondary">@color/tileBlue</item>
+        <item name="colorOnSecondary">@color/textColorLight</item>
+
+        <item name="colorError">@color/snakeRed</item>
+
+        <!-- Fondo oscuro elegante -->
+        <item name="android:windowBackground">#222222</item>
+
+        <item name="materialButtonStyle">@style/SyE.Button.Dark</item>
+
+    </style>
+
+    <!-- Botones en modo oscuro -->
+    <style name="SyE.Button.Dark" parent="Widget.Material3.Button">
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textColor">@color/textColorLight</item>
+    </style>
+
+</resources>

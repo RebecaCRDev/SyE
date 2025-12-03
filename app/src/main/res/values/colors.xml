@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="snakeRed">#E74C3C</color>
+    <color name="ladderGreen">#5CC16E</color>
+    <color name="tileBlue">#4A90E2</color>
+    <color name="tileYellow">#E9C46A</color>
+    <color name="tileCream">#FFF8E7</color>
+
+    <color name="primaryColor">@color/ladderGreen</color>
+    <color name="primaryDark">#1F776B</color>
+    <color name="accentColor">#E76F51</color>
+
+    <color name="textColorDark">#1D1D1D</color>
+    <color name="textColorLight">#FFFFFF</color>
+    <color name="textDark">#333333</color>
+
+</resources>
