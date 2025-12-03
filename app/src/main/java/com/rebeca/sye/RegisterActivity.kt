@@ -2,13 +2,14 @@ package com.rebeca.sye
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.util.Calendar
+import java.text.SimpleDateFormat
+import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -16,9 +17,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        val btnBack = findViewById<Button>(R.id.btnBackRegister)
-        btnBack.setOnClickListener { finish() }
-
+        // CAMPOS
         val etNombre = findViewById<EditText>(R.id.etNombre)
         val etApellidos = findViewById<EditText>(R.id.etApellidos)
         val etFecha = findViewById<EditText>(R.id.etFechaNacimiento)
@@ -26,99 +25,108 @@ class RegisterActivity : AppCompatActivity() {
         val etTelefono = findViewById<EditText>(R.id.etTelefono)
         val etNombrePila = findViewById<EditText>(R.id.etNombrePila)
         val etPassword = findViewById<EditText>(R.id.etPassword)
+
+        // BOTONES
+        val btnBack = findViewById<ImageButton>(R.id.btnBackRegister)
         val btnCrear = findViewById<Button>(R.id.btnCrearUsuario)
 
-        etEmail.addTextChangedListener(validarEmail(etEmail))
-        etTelefono.addTextChangedListener(validarTelefono(etTelefono))
-        etFecha.addTextChangedListener(validarFecha(etFecha))
-        etNombrePila.addTextChangedListener(validarNombreJuego(etNombrePila))
+        // Botón atrás
+        btnBack.setOnClickListener {
+            finish()
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        }
 
+        // Botón crear usuario
         btnCrear.setOnClickListener {
 
-            val camposError = listOf(etEmail, etTelefono, etFecha, etNombrePila)
-            if (camposError.any { it.error != null }) {
-                alert("Datos inválidos", "Corrige todos los errores antes de continuar.")
-                return@setOnClickListener
-            }
-
+            // Validación campos vacíos
             if (etNombre.text.isBlank() ||
                 etApellidos.text.isBlank() ||
-                etPassword.text.isBlank()) {
-                alert("Faltan datos", "Completa todos los campos.")
+                etFecha.text.isBlank() ||
+                etEmail.text.isBlank() ||
+                etTelefono.text.isBlank() ||
+                etNombrePila.text.isBlank() ||
+                etPassword.text.isBlank()
+            ) {
+                mostrarError("Debes completar todos los campos")
                 return@setOnClickListener
             }
 
+            // Validar email
+            if (!Patterns.EMAIL_ADDRESS.matcher(etEmail.text.toString()).matches()) {
+                mostrarError("Email no válido")
+                return@setOnClickListener
+            }
+
+            // Validar teléfono
+            if (!etTelefono.text.toString().matches(Regex("^[0-9]{9}$"))) {
+                mostrarError("Introduce un número de teléfono válido (9 dígitos)")
+                return@setOnClickListener
+            }
+
+            // Validar contraseña
+            if (etPassword.text.length < 6) {
+                mostrarError("La contraseña debe tener al menos 6 caracteres")
+                return@setOnClickListener
+            }
+
+            // Validar fecha y edad
+            val edad = calcularEdad(etFecha.text.toString())
+            if (edad == null) {
+                mostrarError("Introduce la fecha en formato dd/MM/yyyy")
+                return@setOnClickListener
+            }
+            if (edad < 12 || edad > 120) {
+                mostrarError("La edad debe estar entre 12 y 120 años")
+                return@setOnClickListener
+            }
+
+            // Guardar usuario
             val prefs = getSharedPreferences("usuarios", MODE_PRIVATE).edit()
-            prefs.putString("nombrePila", etNombrePila.text.toString())
+            prefs.putString("nombre", etNombre.text.toString())
+            prefs.putString("apellidos", etApellidos.text.toString())
+            prefs.putString("fecha", etFecha.text.toString())
             prefs.putString("email", etEmail.text.toString())
+            prefs.putString("telefono", etTelefono.text.toString())
+            prefs.putString("nombrePila", etNombrePila.text.toString())
             prefs.putString("password", etPassword.text.toString())
             prefs.apply()
 
+            // Volver al login
             val intent = Intent(this, LoginActivity::class.java)
             intent.putExtra("usuarioCreado", true)
             startActivity(intent)
-            finish()
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         }
+
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
     }
 
-    private fun alert(t: String, m: String) {
+    private fun mostrarError(msg: String) {
         MaterialAlertDialogBuilder(this)
-            .setTitle(t)
-            .setMessage(m)
+            .setTitle("Error")
+            .setMessage(msg)
             .setPositiveButton("Aceptar", null)
             .show()
     }
 
-    private fun validarEmail(et: EditText) = object : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {
-            et.error = if (!s.toString().contains("@")) "Debe contener @" else null
-        }
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-    }
+    private fun calcularEdad(fechaStr: String): Int? {
+        return try {
+            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            sdf.isLenient = false
+            val fechaNacimiento = sdf.parse(fechaStr) ?: return null
 
-    private fun validarTelefono(et: EditText) = object : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {
-            val t = s.toString()
-            et.error = if (t.length == 9 && t.all { it.isDigit() }) null else "Debe tener 9 dígitos"
-        }
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-    }
+            val hoy = Calendar.getInstance()
+            val nacimiento = Calendar.getInstance()
+            nacimiento.time = fechaNacimiento
 
-    private fun validarFecha(et: EditText) = object : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {
-            try {
-                val p = s.toString().split("/")
-                if (p.size != 3) {
-                    et.error = "Formato dd/MM/yyyy"
-                    return
-                }
-
-                val d = p[0].toInt()
-                val m = p[1].toInt()
-                val y = p[2].toInt()
-
-                val hoy = Calendar.getInstance()
-                val edad = hoy.get(Calendar.YEAR) - y -
-                        if (hoy.get(Calendar.MONTH) + 1 < m ||
-                            (hoy.get(Calendar.MONTH) + 1 == m && hoy.get(Calendar.DAY_OF_MONTH) < d)) 1 else 0
-
-                et.error = if (edad < 18) "Debes ser mayor de 18" else null
-
-            } catch (_: Exception) {
-                et.error = "Fecha no válida"
+            var edad = hoy.get(Calendar.YEAR) - nacimiento.get(Calendar.YEAR)
+            if (hoy.get(Calendar.DAY_OF_YEAR) < nacimiento.get(Calendar.DAY_OF_YEAR)) {
+                edad--
             }
+            edad
+        } catch (e: Exception) {
+            null
         }
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-    }
-
-    private fun validarNombreJuego(et: EditText) = object : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {
-            et.error = if (s.toString().length < 3) "Mínimo 3 caracteres" else null
-        }
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
     }
 }

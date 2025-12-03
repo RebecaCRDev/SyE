@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -14,28 +15,43 @@ class LoginFormActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login_form)
 
         val etEmail = findViewById<EditText>(R.id.etEmailLogin)
-        val etPass = findViewById<EditText>(R.id.etPasswordLogin)
-        val btnBack = findViewById<Button>(R.id.btnBackLoginForm)
-        val btnIniciar = findViewById<Button>(R.id.btnIniciarSesion)
+        val etPassword = findViewById<EditText>(R.id.etPasswordLogin)
+        val btnLogin = findViewById<Button>(R.id.btnIniciarSesion)
+        val btnBack = findViewById<ImageButton>(R.id.btnBackLoginForm)
 
-        btnBack.setOnClickListener { finish() }
+        // Botón atrás (flecha)
+        btnBack.setOnClickListener {
+            finish()
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        }
 
-        btnIniciar.setOnClickListener {
+        // Botón iniciar sesión
+        btnLogin.setOnClickListener {
+            val email = etEmail.text.toString().trim()
+            val password = etPassword.text.toString().trim()
+
+            if (email.isEmpty() || password.isEmpty()) {
+                MaterialAlertDialogBuilder(this)
+                    .setTitle("Error")
+                    .setMessage("Todos los campos son obligatorios.")
+                    .setPositiveButton("Aceptar", null)
+                    .show()
+                return@setOnClickListener
+            }
+
             val prefs = getSharedPreferences("usuarios", MODE_PRIVATE)
             val emailGuardado = prefs.getString("email", null)
             val passGuardada = prefs.getString("password", null)
 
-            if (etEmail.text.toString() == emailGuardado &&
-                etPass.text.toString() == passGuardada) {
-
+            if (email == emailGuardado && password == passGuardada) {
                 val intent = Intent(this, LoginActivity::class.java)
                 intent.putExtra("inicioCorrecto", true)
                 startActivity(intent)
-                finish()
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             } else {
                 MaterialAlertDialogBuilder(this)
-                    .setTitle("Datos incorrectos")
-                    .setMessage("Email o contraseña no válidos.")
+                    .setTitle("Error")
+                    .setMessage("Credenciales incorrectas.")
                     .setPositiveButton("Aceptar", null)
                     .show()
             }

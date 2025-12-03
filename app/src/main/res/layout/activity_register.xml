@@ -1,111 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_registro">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
+    <ImageButton
+        android:id="@+id/btnBackRegister"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="16dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/baseline_arrow_back_24"
+        android:drawableTint="@android:color/white"
+        android:contentDescription="Atrás" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="24dp">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnBackRegister"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            app:icon="@drawable/baseline_arrow_back_24"
-            app:iconTint="@android:color/white"
-            app:backgroundTint="@android:color/transparent"
-            app:cornerRadius="0dp"
-            android:layout_marginBottom="12dp"/>
-
-        <TextView
-            android:text="Crear Cuenta"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:layout_marginBottom="24dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:id="@+id/etNombre"
-            android:hint="Nombre"
-            android:background="@android:color/white"
-            android:padding="12dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:id="@+id/etApellidos"
-            android:hint="Apellidos"
-            android:background="@android:color/white"
-            android:padding="12dp"
-            android:layout_marginTop="12dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:id="@+id/etFechaNacimiento"
-            android:hint="Fecha de nacimiento (dd/MM/yyyy)"
-            android:background="@android:color/white"
-            android:padding="12dp"
-            android:layout_marginTop="12dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:id="@+id/etEmail"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:background="@android:color/white"
-            android:padding="12dp"
-            android:layout_marginTop="12dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:id="@+id/etTelefono"
-            android:hint="Teléfono"
-            android:inputType="phone"
-            android:background="@android:color/white"
-            android:padding="12dp"
-            android:layout_marginTop="12dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:id="@+id/etNombrePila"
-            android:hint="Nombre en el juego"
-            android:background="@android:color/white"
-            android:padding="12dp"
-            android:layout_marginTop="12dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:id="@+id/etPassword"
-            android:hint="Contraseña"
-            android:inputType="textPassword"
-            android:background="@android:color/white"
-            android:padding="12dp"
-            android:layout_marginTop="12dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCrearUsuario"
+        <LinearLayout
+            android:id="@+id/registerContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Crear Usuario"
-            android:textColor="@android:color/white"
-            android:backgroundTint="@color/tileBlue"
-            app:cornerRadius="12dp"
-            android:layout_marginTop="24dp"/>
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="24dp">
 
-    </LinearLayout>
-</ScrollView>
+            <TextView
+                android:id="@+id/tituloRegistro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Crear cuenta"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:layout_marginBottom="24dp" />
+
+            <EditText
+                android:id="@+id/etNombre"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="Nombre"
+                android:padding="12dp"
+                android:background="@android:color/white"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/etApellidos"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="Apellidos"
+                android:padding="12dp"
+                android:background="@android:color/white"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/etFechaNacimiento"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="Fecha de nacimiento (dd/MM/yyyy)"
+                android:padding="12dp"
+                android:background="@android:color/white"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/etTelefono"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="Teléfono"
+                android:inputType="number"
+                android:padding="12dp"
+                android:background="@android:color/white"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:padding="12dp"
+                android:background="@android:color/white"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/etNombrePila"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="Nombre de pila (nick)"
+                android:padding="12dp"
+                android:background="@android:color/white"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:hint="Contraseña"
+                android:inputType="textPassword"
+                android:padding="12dp"
+                android:background="@android:color/white"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="24dp" />
+
+            <Button
+                android:id="@+id/btnCrearUsuario"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:text="Crear usuario"
+                android:background="@android:color/white"
+                android:textColor="@android:color/black" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

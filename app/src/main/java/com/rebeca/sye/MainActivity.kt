@@ -1,14 +1,10 @@
 package com.rebeca.sye
 
-import android.graphics.Color
+import android.content.Intent
 import android.os.Bundle
-import android.util.TypedValue
-import android.view.Gravity
-import android.widget.FrameLayout
-import android.widget.GridLayout
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.card.MaterialCardView
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,71 +12,44 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val tablero = findViewById<GridLayout>(R.id.tableroLayout)
+        val tvUsuario = findViewById<TextView>(R.id.tvUsuario)
+        val btnJugar = findViewById<Button>(R.id.btnJugar)
+        val btnCrearPerfil = findViewById<Button>(R.id.btnCrearPerfil)
+        val btnIrLogin = findViewById<Button>(R.id.btnIrLogin)
+        val btnCerrarSesion = findViewById<Button>(R.id.btnCerrarSesion)
 
-        tablero.rowCount = 10
-        tablero.columnCount = 10
+        val prefs = getSharedPreferences("usuarios", MODE_PRIVATE)
+        val usuario = prefs.getString("nombrePila", null)
 
-        val colores = listOf(
-            Color.parseColor("#F7DC6F"),
-            Color.parseColor("#AED6F1"),
-            Color.parseColor("#ABEBC6"),
-            Color.parseColor("#F5B7B1")
-        )
+        if (usuario != null) {
+            tvUsuario.text = usuario
+            btnJugar.visibility = Button.VISIBLE
+            btnCerrarSesion.visibility = Button.VISIBLE
+            btnCrearPerfil.visibility = Button.GONE
+            btnIrLogin.visibility = Button.GONE
+        } else {
+            tvUsuario.text = "USUARIO"
+            btnJugar.visibility = Button.GONE
+            btnCerrarSesion.visibility = Button.GONE
+            btnCrearPerfil.visibility = Button.VISIBLE
+            btnIrLogin.visibility = Button.VISIBLE
+        }
 
-        val serpientes = setOf(98, 87, 65, 43)
-        val escaleras = setOf(4, 12, 27, 39)
+        btnJugar.setOnClickListener {
+            startActivity(Intent(this, GameActivity::class.java))
+        }
 
-        for (numero in 100 downTo 1) {
-            val card = MaterialCardView(this)
+        btnCrearPerfil.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
 
-            val params = GridLayout.LayoutParams().apply {
-                width = 0
-                height = dpToPx(42f)
-                columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                setMargins(dpToPx(2f), dpToPx(2f), dpToPx(2f), dpToPx(2f))
-            }
+        btnIrLogin.setOnClickListener {
+            startActivity(Intent(this, LoginFormActivity::class.java))
+        }
 
-            card.layoutParams = params
-            card.radius = dpToPx(4f).toFloat()
-            card.cardElevation = dpToPx(2f).toFloat()
-
-            val index = (numero - 1) % colores.size
-            card.setCardBackgroundColor(colores[index])
-
-            val frame = FrameLayout(this)
-
-            val tv = TextView(this).apply {
-                text = numero.toString()
-                setTextColor(Color.BLACK)
-                gravity = Gravity.TOP or Gravity.START
-                setPadding(dpToPx(4f), dpToPx(4f), 0, 0)
-            }
-
-            frame.addView(tv)
-
-            if (numero in serpientes) {
-                val serpienteView = android.view.View(this).apply {
-                    layoutParams = FrameLayout.LayoutParams(dpToPx(12f), dpToPx(38f), Gravity.CENTER)
-                    setBackgroundResource(R.drawable.serpiente)
-                }
-                frame.addView(serpienteView)
-            }
-
-            if (numero in escaleras) {
-                val escaleraView = android.view.View(this).apply {
-                    layoutParams = FrameLayout.LayoutParams(dpToPx(40f), dpToPx(6f), Gravity.CENTER)
-                    rotation = 45f
-                    setBackgroundResource(R.drawable.escalera)
-                }
-                frame.addView(escaleraView)
-            }
-
-            card.addView(frame)
-            tablero.addView(card)
+        btnCerrarSesion.setOnClickListener {
+            prefs.edit().clear().apply()
+            recreate()
         }
     }
-
-    private fun dpToPx(dp: Float): Int =
-        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics).toInt()
 }
